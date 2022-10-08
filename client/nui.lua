@@ -1,3 +1,5 @@
+local QRCore = exports['qr-core']:GetCoreObject()
+
 RegisterNetEvent("hidemenu")
 AddEventHandler("hidemenu", function()
     InBank = false

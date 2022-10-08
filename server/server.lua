@@ -1,3 +1,4 @@
+local QRCore = exports['qr-core']:GetCoreObject()
 
 
 Citizen.CreateThread(function()
@@ -117,7 +118,7 @@ RegisterServerEvent('qr-banking:server:unpackMoneyBag')
 AddEventHandler('qr-banking:server:unpackMoneyBag', function(item)
     local _src = source
     if item ~= nil then
-        local xPlayer = exports['qr-core']:GetPlayer(_src)
+        local xPlayer = QRCore.Functions.GetPlayer(_src)
         local xPlayerCID = xPlayer.PlayerData.citizenid
         local decode = json.decode(item.metapublic)
     end
@@ -125,7 +126,7 @@ end)
 
 function getCharacterName(cid)
     local src = source
-    local player = exports['qr-core']:GetPlayer(src)
+    local player = QRCore.Functions.GetPlayer(src)
     local name = player.PlayerData.name
 end
 
@@ -135,9 +136,9 @@ function format_int(number)
     return minus .. int:reverse():gsub("^,", "") .. fraction
 end
 
-exports['qr-core']:CreateCallback('qr-banking:getBankingInformation', function(source, cb)
+QRCore.Functions.CreateCallback('qr-banking:getBankingInformation', function(source, cb)
     local src = source
-    local xPlayer = exports['qr-core']:GetPlayer(src)
+    local xPlayer = QRCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
         if (xPlayer) then
             local banking = {
@@ -165,7 +166,7 @@ end)
 RegisterServerEvent('qr-banking:doQuickDeposit')
 AddEventHandler('qr-banking:doQuickDeposit', function(amount)
     local src = source
-    local xPlayer = exports['qr-core']:GetPlayer(src)
+    local xPlayer = QRCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentCash = xPlayer.Functions.GetMoney('cash')
 
@@ -183,7 +184,7 @@ end)
 RegisterServerEvent('qr-banking:doQuickWithdraw')
 AddEventHandler('qr-banking:doQuickWithdraw', function(amount, branch)
     local src = source
-    local xPlayer = exports['qr-core']:GetPlayer(src)
+    local xPlayer = QRCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentCash = xPlayer.Functions.GetMoney('bank')
 
@@ -201,7 +202,7 @@ end)
 RegisterServerEvent('qr-banking:savingsDeposit')
 AddEventHandler('qr-banking:savingsDeposit', function(amount)
     local src = source
-    local xPlayer = exports['qr-core']:GetPlayer(src)
+    local xPlayer = QRCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentBank = xPlayer.Functions.GetMoney('bank')
 
@@ -219,7 +220,7 @@ end)
 RegisterServerEvent('qr-banking:savingsWithdraw')
 AddEventHandler('qr-banking:savingsWithdraw', function(amount)
     local src = source
-    local xPlayer = exports['qr-core']:GetPlayer(src)
+    local xPlayer = QRCore.Functions.GetPlayer(src)
     while xPlayer == nil do Wait(0) end
     local currentSavings = savingsAccounts[xPlayer.PlayerData.citizenid].GetBalance()
 
@@ -237,7 +238,7 @@ end)
 RegisterServerEvent('qr-banking:createSavingsAccount')
 AddEventHandler('qr-banking:createSavingsAccount', function()
     local src = source
-    local xPlayer = exports['qr-core']:GetPlayer(src)
+    local xPlayer = QRCore.Functions.GetPlayer(src)
     local success = createSavingsAccount(xPlayer.PlayerData.citizenid)
 
     repeat Wait(0) until success ~= nil
@@ -247,14 +248,14 @@ AddEventHandler('qr-banking:createSavingsAccount', function()
 end)
 
 
-exports['qr-core']:AddCommand('givecash', 'Give cash to player.', {{name = 'id', help = 'Player ID'}, {name = 'amount', help = 'Amount'}}, true, function(source, args)
+QRCore.Commands.Add('givecash', 'Give cash to player.', {{name = 'id', help = 'Player ID'}, {name = 'amount', help = 'Amount'}}, true, function(source, args)
     local src = source
 	local id = tonumber(args[1])
 	local amount = math.ceil(tonumber(args[2]))
 
 	if id and amount then
-		local xPlayer = exports['qr-core']:GetPlayer(src)
-		local xReciv = exports['qr-core']:GetPlayer(id)
+		local xPlayer = QRCore.Functions.GetPlayer(src)
+		local xReciv = QRCore.Functions.GetPlayer(id)
 
 		if xReciv and xPlayer then
 			if not xPlayer.PlayerData.metadata["isdead"] then

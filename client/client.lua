@@ -1,3 +1,4 @@
+local QRCore = exports['qr-core']:GetCoreObject()
 local banks
 local showing, playerLoaded = false, false
 InBank = false
@@ -13,7 +14,7 @@ AddEventHandler('qr-banking:client:syncBanks', function(data)
 end)
 
 function openAccountScreen()
-    exports['qr-core']:TriggerCallback('qr-banking:getBankingInformation', function(banking)
+    QRCore.Functions.TriggerCallback('qr-banking:getBankingInformation', function(banking)
         if banking ~= nil then
             InBank = true
             SetNuiFocus(true, true)
@@ -28,7 +29,7 @@ function openAccountScreen()
 end
 
 function atmRefresh()
-    exports['qr-core']:TriggerCallback('qr-banking:getBankingInformation', function(infor)
+    QRCore.Functions.TriggerCallback('qr-banking:getBankingInformation', function(infor)
         InBank = true
         SetNuiFocus(true, true)
         SendNUIMessage({
