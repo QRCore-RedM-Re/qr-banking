@@ -147,16 +147,6 @@ QRCore.Functions.CreateCallback('qr-banking:getBankingInformation', function(sou
                     ['cash'] = '$'.. format_int(xPlayer.PlayerData.money['cash']),
                     ['accountinfo'] = xPlayer.PlayerData.charinfo.account,
                 }
-                --[[
-                if savingsAccounts[xPlayer.PlayerData.citizenid] then
-                    local cid = xPlayer.PlayerData.citizenid
-                    banking['savings'] = {
-                        ['amount'] = savingsAccounts[cid].GetBalance(),
-                        ['details'] = savingsAccounts[cid].getAccount(),
-                        ['statement'] = savingsAccounts[cid].getStatement(),
-                    }
-                end
-                ]]
                 cb(banking)
         else
             cb(nil)
