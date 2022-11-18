@@ -46,11 +46,28 @@ end)
 
 Citizen.CreateThread(function()
     for banks, v in pairs(Config.BankLocations) do
-        exports['qr-core']:createPrompt(v.name, v.coords, 0xF3830D8E, 'Open ' .. v.name, {
-            type = 'client',
-            event = 'qr-banking:openBankScreen',
-            args = { false, true, false },
-        })
+        if Config.UseTarget == false then
+            exports['qr-core']:createPrompt(v.name, v.coords, 0xF3830D8E, 'Open ' .. v.name, {
+                type = 'client',
+                event = 'qr-banking:openBankScreen',
+                args = { false, true, false },
+            })
+        else
+            exports['qr-target']:AddCircleZone(v.name, v.coords, 1, {
+                name = v.name,
+                debugPoly = false,
+              }, {
+                options = {
+                  {
+                    type = "client",
+                    event = 'qr-banking:openBankScreen',
+                    icon = "fas fa-dollar-sign",
+                    label = "Open Bank",
+                  },
+                },
+                distance = 2.0,
+              })
+        end
         if v.showblip == true then
             local StoreBlip = N_0x554d9d53f696d002(1664425300, v.coords)
             SetBlipSprite(StoreBlip, -2128054417, 52)

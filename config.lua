@@ -1,5 +1,5 @@
 Config = {}
-
+Config.UseTarget = GetConvar('UseTarget', 'false') == 'true' -- Use qr-target interactions (don't change this, go to your server.cfg and add setr UseTarget true)
 Config.cardTypes = { "visa", "mastercard"}
 
 Config.ATMModels = {
