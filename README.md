@@ -1,77 +1,36 @@
-# qb-banking
-
-## Dependencies
-- [qb-core](https://github.com/QRCore-framework/qb-core)
-- [qb-logs](https://github.com/QRCore-framework/qb-logs) - For keeping records
-
-## Screenshots
-![Account Home](https://i.imgur.com/XazaYYI.png)
-![Debit Card Selection on ATM](https://i.imgur.com/dvJ9hnC.png)
-![Savings Account](https://i.imgur.com/1HFUL06.png)
-![Transfer](https://i.imgur.com/SqADuRg.png)
-![Account Options](https://i.imgur.com/blMgfpG.png)
+# qr-banking
+- Banking System for QR-Core
 
 ## Features
-- Debit card (MasterCard/Visa) with PIN
+- Withdraw / Deposit
+- Transfer Funds
 - Savings Account
-- Detailed interface
-- /atm for players
-- /refreshBanks
-- Business and Gang accounts
+
+## Dependencies
+- [qr-core](https://github.com/QRCore-framework/qb-core)
+- [qr-smallresources](https://github.com/QRCore-RedM-Re/qr-smallresources) - Log bank activity
+
+## Screenshots
+![image](https://user-images.githubusercontent.com/101474430/232979374-0b8dca96-3991-47d5-8002-e4e68d4a5a75.png)
+![image](https://user-images.githubusercontent.com/101474430/232979409-1dd9def9-3d09-4149-9748-ef2c0ace766e.png)
+![image](https://user-images.githubusercontent.com/101474430/232979443-d1ba5ee2-8441-4da9-b0d0-71e04e03656e.png)
 
 ## Installation
-### Manual
-- Download the script and put it in the `[qb]` directory.
-- Import `qb-banking.sql` in your database
-- Add the following code to your server.cfg/resouces.cfg
+- Download the script and put it in the `[qr]` directory.
+- Import `qr-banking.sql` in your database
+- Add the following code to your server.cfg
 ```
-ensure qb-core
-ensure qb-logs
-ensure qb-banking
+ensure qr-core
+ensure qr-smallresources
+ensure qr-banking
 ```
-# Server.cfg Convar Update
-- Global DrawTextUi Option
-```
-setr UseTarget false
-``` 
-
-- Global Target Option
+- (Optional) Enable target functionality from server.cfg
 ```
 setr UseTarget true
 ```
 
-## Configuration
-```
-Config = {}
-
-Config.Blip = {
-    blipName = "Bank", -- Blips name for banks
-    blipType = 108, -- Blip icon for banks
-    blipColor = 37, -- Blip color for banks
-    blipScale = 0.8 -- Blip scale for banks
-    }
-
-Config.ATMModels = { -- Props which will be considered as ATM (Can use /atm nearby)
-        "prop_atm_01",
-        "prop_atm_02",
-        "prop_atm_03",
-        "prop_fleeca_atm"
-    }
-
-Config.BankLocations = { -- Bank locations
-    { ['x'] = 149.9,    ['y'] = -1040.46,   ['z'] = 29.37,  ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    { ['x'] = 314.23,   ['y'] = -278.83,    ['z'] = 54.17,  ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    { ['x'] = -350.8,   ['y'] = -49.57,     ['z'] = 49.04,  ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    { ['x'] = -1213.0,  ['y'] = -330.39,    ['z'] = 37.79,  ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    { ['x'] = -2962.71, ['y'] = 483.0,      ['z'] = 15.7,   ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    { ['x'] = 1175.07,  ['y'] = 2706.41,    ['z'] = 38.09,  ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    { ['x'] = 1653.41,  ['y'] = 4850.6,     ['z'] = 41.99,  ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    
-    -- Pacific Standard Bank
-    { ['x'] = 246.64, ['y'] = 223.20, ['z'] = 106.29, ['bankOpen'] = true, ['bankCooldown'] = 0 },
-    -- Paleto
-    { ['x'] = -113.22, ['y'] = 6470.03, ['z'] = 31.63, ['bankOpen'] = true, ['bankCooldown'] = 0 },
-}
-
-Config.cardTypes = { "visa", "mastercard"} -- Debit card types (When requesting a debit card it gives randomly one of these.)
-```
+# Issues, Suggestions & Support
+* This resource is still in development. All help with improving the resource is encouraged and appreciated
+* Please use the [GitHub](https://github.com/QRCore-RedM-Re) issues system to report issues or make suggestions
+* When making suggestions, please keep `[Suggestion]` in the title to make it clear that it is a suggestion, or join the Discord
+* Discord: https://discord.gg/bEs6cn3225
