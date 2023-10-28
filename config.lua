@@ -48,3 +48,5 @@ Config.BankDoors = { --Doors that will always be open unless robbery has started
 	1329318347, -- inner door
 	1366165179, -- back door
 }
+
+QRCore = exports['qr-core']:GetCoreObject()

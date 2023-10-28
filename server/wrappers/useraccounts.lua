@@ -1,5 +1,3 @@
-local QRCore = exports['qr-core']:GetCoreObject()
-
 function generateCurrent(cid)
     local self = {}
     self.cid = cid
@@ -135,12 +133,12 @@ function generateCurrent(cid)
 
                 if self.source ~= -1 then
                     TriggerClientEvent('qr-banking:client:newCardSuccess', self.source, cardNumber, friendlyName)
-                    local xPlayer = QRCore.Functions.GetPlayer(self.source)
+                    local player = QRCore.Functions.GetPlayer(self.source)
 
                     if selectedCard == "visa" then
-                        xPlayer.Functions.AddItem('visa', 1)
+                        player.Functions.AddItem('visa', 1)
                     elseif selectedCard == "mastercard" then
-                        xPlayer.Functions.AddItem('mastercard', 1)
+                        player.Functions.AddItem('mastercard', 1)
                     end
                 end
             end)

@@ -1,4 +1,3 @@
-
 businessAccounts = {}
 currentAccounts = {}
 savingsAccounts = {}
@@ -6,7 +5,6 @@ gangAccounts = {}
 bankCards = {}
 
 function generatebusinessAccount(acc, sc, bid)
-
     local self = {}
 
     self.accountNumber = tonumber(acc)

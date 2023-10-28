@@ -1,4 +1,3 @@
-local QRCore = exports['qr-core']:GetCoreObject()
 local banks
 local showing, playerLoaded = false, false
 local BankPed = {}
