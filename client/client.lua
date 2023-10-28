@@ -28,15 +28,11 @@ local function SET_PED_RELATIONSHIP_GROUP_HASH ( iVar0, iParam0 )
     return Citizen.InvokeNative( 0xC80A74AC829DDD92, iVar0, _GET_DEFAULT_RELATIONSHIP_GROUP_HASH( iParam0 ) )
 end
 
-local function modelRequest(model)
-    CreateThread(function() RequestModel(model) end)
-end
-
 -- Spawn Ped --
 local function QRSpawnPed(model, coords)
     local pedmodel = GetHashKey(model)
 
-    while not HasModelLoaded(GetHashKey(model)) do Wait(500) modelRequest(GetHashKey(model)) end
+    lib.requestModel(pedmodel)
 
     local pedId = CreatePed(pedmodel, coords.x, coords.y, coords.z - 1, coords.w, false, false, 0, 0)
     while not DoesEntityExist(pedId) do Wait(300) end
@@ -54,23 +50,21 @@ local function QRSpawnPed(model, coords)
 end
 
 -- Open Bank UI --
-function openAccountScreen()
-    QRCore.Functions.TriggerCallback('qr-banking:getBankingInformation', function(banking)
-        if banking ~= nil then
-            InBank = true
-            SetNuiFocus(true, true)
-            SendNUIMessage({
-                status = "openbank",
-                information = banking
-            })
+local function openAccountScreen()
+    local banking = lib.callback.await('qr-banking:getBankingInformation', false)
+    if banking then
+        InBank = true
+        SetNuiFocus(true, true)
 
-            TriggerEvent("debug", 'Banking: Open UI', 2000, 0, 'hud_textures', 'check')
-        end
-    end)
+        SendNUIMessage({ status = "openbank", information = banking })
+
+        TriggerEvent("debug", 'Banking: Open UI', 2000, 0, 'hud_textures', 'check')
+    end
 end
+exports('openAccountScreen', openAccountScreen)
 
 -- Threads / Startup --
-CreateThread(function()
+local function CreateBanks()
     for banks, v in pairs(Config.BankLocations) do
         if BankPed[banks] == nil then BankPed[banks] = QRSpawnPed('A_M_M_BiVFancyTravellers_01', v.coords) end
         if not Config.UseTarget then
@@ -88,7 +82,7 @@ CreateThread(function()
                         event = 'qr-banking:openBankScreen',
                         icon = "fas fa-dollar-sign",
                         label = "Open Bank",
-                      },
+                    },
                 },
                 distance = 3.0,
             })
@@ -99,37 +93,33 @@ CreateThread(function()
             SetBlipScale(BankBlips[banks], 0.2)
         end
     end
-end)
+end
 
 CreateThread(function()
-    for k,v in pairs(Config.BankDoors) do
+    for _, v in pairs(Config.BankDoors) do
         Citizen.InvokeNative(0xD99229FE93B46286, v, 1, 1, 0, 0, 0, 0)
         Citizen.InvokeNative(0x6BAB9442830C7F53, v, 0)
     end
 end)
 
 -- Events --
-RegisterNetEvent('qr-banking:openBankScreen')
-AddEventHandler('qr-banking:openBankScreen', function()
+RegisterNetEvent('qr-banking:openBankScreen', function()
     openAccountScreen()
 end)
 
-RegisterNetEvent('qr-banking:client:syncBanks')
-AddEventHandler('qr-banking:client:syncBanks', function(data)
+RegisterNetEvent('qr-banking:client:syncBanks', function(data)
     banks = data
     if showing then showing = false end
 end)
 
-RegisterNetEvent('qr-banking:transferError')
-AddEventHandler('qr-banking:transferError', function(msg)
+RegisterNetEvent('qr-banking:transferError', function(msg)
     SendNUIMessage({
         status = "transferError",
         error = msg
     })
 end)
 
-RegisterNetEvent('qr-banking:successAlert')
-AddEventHandler('qr-banking:successAlert', function(msg)
+RegisterNetEvent('qr-banking:successAlert', function(msg)
     SendNUIMessage({
         status = "successMessage",
         message = msg
@@ -137,4 +127,7 @@ AddEventHandler('qr-banking:successAlert', function(msg)
 end)
 
 -- Resource Stop / Cleanup --
+AddEventHandler('QRCore:Client:OnPlayerLoaded', function() CreateBanks() end)
+AddEventHandler('QRCore:Client:OnPlayerLoaded', function() BankCleanup() end)
+AddEventHandler('onResourceStart', function(resource) if resource ~= GetCurrentResourceName() then return end CreateBanks() end)
 AddEventHandler('onResourceStop', function(resource) if resource ~= GetCurrentResourceName() then return end BankCleanup() end)
